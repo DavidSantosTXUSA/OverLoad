@@ -1,1 +1,48 @@
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+build/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xcscmblueprint
+
+# SwiftPM
+.build/
+.swiftpm/
+Package.resolved
+
+# Cocoapods (if you ever add it)
+Pods/
+
+# Carthage (if you ever use it)
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Firebase / GoogleService files (optional if private)
+GoogleService-Info.plist
+
+# IDE / editor settings
+.idea/
+*.swp
+*.swo
+
+# Xcode automatic backup
+*.xcuserstate
+*.xcworkspace
+
+# Zip & temp files
+*.zip
+*.tmp
+

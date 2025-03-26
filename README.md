@@ -1,4 +1,4 @@
-# WorkoutApp
+# OverLoad
 
 An iOS app designed to help users track and manage their workouts effortlessly. Built with Swift in Xcode!
 

@@ -125,20 +125,30 @@ struct WorkoutDetailView: View {
                         .shadow(color: (timerRunning ? Color.red : Color.blue).opacity(0.5), radius: 8, x: 0, y: 4)
                 }
                 .padding(.horizontal)
-                .padding(.bottom)
+
+                if timerRunning || timeElapsed > 0 {
+                    Button(action: {
+                        stopTimer()
+                        saveWorkout()
+                    }) {
+                        Text("Finish Workout")
+                            .font(.headline)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green.opacity(0.7))
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
+                            .shadow(color: Color.green.opacity(0.5), radius: 8, x: 0, y: 4)
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                }
             }
         }
         .navigationTitle(workoutSession.name)
-        .onDisappear {
-            if timerRunning {
-                stopTimer()
-            }
-            saveWorkout()
-        }
         .preferredColorScheme(.dark)
     }
 
-    // Timer & Save Logic
     func toggleTimer() {
         timerRunning.toggle()
         if timerRunning { startTimer() } else { stopTimer() }

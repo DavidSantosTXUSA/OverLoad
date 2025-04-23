@@ -18,7 +18,11 @@ struct WorkoutApp: App {
                     Image(systemName: "list.bullet.rectangle.fill")
                     Text("Workouts")
                 }
-
+                CalcView()
+                    .tabItem {
+                        Image(systemName: "function")
+                        Text("Calc")
+                    }
                 ProgressView(workoutSessionViewModel: workoutSessionViewModel)
                     .tabItem {
                         Image(systemName: "chart.bar.xaxis")

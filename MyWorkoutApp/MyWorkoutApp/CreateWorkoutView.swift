@@ -121,6 +121,7 @@ struct CreateWorkoutView: View {
             EditButton().foregroundColor(.green)
         }
         .preferredColorScheme(.dark)
+        .dismissKeyboardOnTap()
     }
 
     func toggleExerciseSelection(exercise: Exercise) {

@@ -98,6 +98,7 @@ struct ProgressView: View {
             .navigationTitle("Progress")
         }
         .preferredColorScheme(.dark)
+        .dismissKeyboardOnTap()
     }
 
     private var filteredSessions: [WorkoutSession] {
@@ -119,7 +120,7 @@ struct ProgressView: View {
                 workoutSessionViewModel.workoutSessions.remove(at: indexInAll)
             }
         }
-
+        
         workoutSessionViewModel.saveWorkoutSessions()
     }
 }

@@ -29,9 +29,33 @@
 		B51745112CC6B9E8008EE709 /* MyWorkoutAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyWorkoutAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B59EB88A2DB9DCC200326AEE /* Exceptions for "MyWorkoutApp" folder in "Overload" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Helpers.swift,
+			);
+			target = B51744F42CC6B9E6008EE709 /* Overload */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		B59EB88B2DB9DCC200326AEE /* Exceptions for "MyWorkoutApp" folder in "Copy Bundle Resources" phase from "Overload" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = B51744F32CC6B9E6008EE709 /* Resources */;
+			membershipExceptions = (
+				Helpers.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B51744F72CC6B9E6008EE709 /* MyWorkoutApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B59EB88A2DB9DCC200326AEE /* Exceptions for "MyWorkoutApp" folder in "Overload" target */,
+				B59EB88B2DB9DCC200326AEE /* Exceptions for "MyWorkoutApp" folder in "Copy Bundle Resources" phase from "Overload" target */,
+			);
 			path = MyWorkoutApp;
 			sourceTree = "<group>";
 		};

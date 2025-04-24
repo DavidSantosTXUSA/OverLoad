@@ -57,6 +57,7 @@ struct PlateCalculatorView: View {
 
             Spacer()
         }
+        .dismissKeyboardOnTap()
         .padding()
         .background(Color.black.edgesIgnoringSafeArea(.all))
         .onChange(of: targetWeight) { _ in

@@ -105,6 +105,7 @@ struct EditWorkoutView: View {
                 .cornerRadius(12)
                 .shadow(color: Color.blue.opacity(0.5), radius: 6)
                 .padding()
+                .dismissKeyboardOnTap()
             }
         }
         .navigationTitle("Edit \(workoutSession.name)")

@@ -67,6 +67,7 @@ struct RPECalculatorView: View {
         }
         .padding()
         .background(Color.black.edgesIgnoringSafeArea(.all))
+        .dismissKeyboardOnTap()
     }
 
     func calculate() {

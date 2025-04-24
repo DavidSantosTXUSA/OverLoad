@@ -147,6 +147,7 @@ struct WorkoutDetailView: View {
         }
         .navigationTitle(workoutSession.name)
         .preferredColorScheme(.dark)
+        .dismissKeyboardOnTap()
     }
 
     func toggleTimer() {

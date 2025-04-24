@@ -6,7 +6,7 @@ struct PlateView: View {
     let index: Int?
     static let darkBar = Color(red: 0.15, green: 0.15, blue: 0.15)
     var body: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 6) {
             // Optional index for big plates
             if (weight == 45) || (weight == 25 && isKgMode), let idx = index {
                 Text("\(idx)")
@@ -28,9 +28,12 @@ struct PlateView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 2)
                     .fill(plateColor(for: weight))
-                    .frame(width: plateWidth(for: weight), height: plateHeight(for: weight))
+                    .frame(
+                        width: plateWidth(for: weight, isKgMode: isKgMode),
+                        height: plateHeight(for: weight, isKgMode: isKgMode)
+                    )
 
-                if plateWidth(for: weight) <= 18 {
+                if plateWidth(for: weight, isKgMode: isKgMode) <= 18 {
                     // Vertical digits for narrow plates
                     VStack(spacing: 0) {
                         ForEach(Array(weight.clean), id: \.self) { char in
@@ -64,27 +67,54 @@ struct PlateView: View {
         }
     }
 
-    func plateWidth(for weight: Double) -> CGFloat {
-        switch weight {
-        case 45, 25.0: return 25
-        case 20.0: return 21.5
-        case 35, 15.0: return 20
-        case 25, 10.0 : return 20
-        case 10: return 20
-        case 5: return 18
-        case 2.5, 1.25: return 16
-        default: return 16
+    func plateWidth(for weight: Double, isKgMode: Bool) -> CGFloat {
+        if isKgMode {
+            // KG width mapping based on standard competition discs
+            switch weight {
+            case 25.0: return 26
+            case 20.0: return 24
+            case 15.0: return 22
+            case 10.0: return 20
+            case 5.0: return 18
+            case 2.5, 1.25: return 16
+            default: return 16
+            }
+        } else {
+            // LB width mapping based on typical iron plates
+            switch weight {
+            case 45.0: return 26
+            case 35.0: return 24
+            case 25.0: return 22
+            case 10.0: return 20
+            case 5.0: return 18
+            case 2.5: return 16
+            default: return 16
+            }
         }
     }
-    func plateHeight(for weight: Double) -> CGFloat {
-        switch weight {
-        case 45, 25.0, 20.0: return 250
-        case 35 : return 225
-        case 25, 15.0: return 200
-        case 10: return 170
-        case 5: return 140
-        case 2.5: return 120
-        default: return 100
+
+    func plateHeight(for weight: Double, isKgMode: Bool) -> CGFloat {
+        if isKgMode {
+            // KG standard height mapping
+            switch weight {
+            case 25.0, 20.0: return 250
+            case 15.0: return 200
+            case 10.0: return 170
+            case 5.0: return 140
+            case 2.5, 1.25: return 120
+            default: return 100
+            }
+        } else {
+            // LB standard height mapping
+            switch weight {
+            case 45.0: return 250
+            case 35.0: return 225
+            case 25.0: return 200
+            case 10.0: return 170
+            case 5.0: return 140
+            case 2.5: return 120
+            default: return 100
+            }
         }
     }
 

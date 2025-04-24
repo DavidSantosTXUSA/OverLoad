@@ -10,7 +10,7 @@ struct BarbellView: View {
             HStack(spacing: 0) {
                 Rectangle() // Shaft
                     .fill(Color.darkBar)
-                    .frame(width: 60, height: 12)
+                    .frame(width: 90, height: 12)
 
                 Rectangle() // Grip zone
                     .fill(Color.gray.opacity(0.7))
@@ -18,7 +18,7 @@ struct BarbellView: View {
 
                 Rectangle() // Sleeve where plates go (length for 10 plates)
                     .fill(Color.gray)
-                    .frame(width: sleeveWidth(), height: 16)
+                    .frame(width: 200 , height: 16)
 
             }
 
@@ -29,14 +29,10 @@ struct BarbellView: View {
                 }
             }
             .frame(height: 120)
-            .padding(.leading, 80)
+            .padding(.leading, 110)
         }
         .frame(height: 140)
-    }
-
-    func sleeveWidth() -> CGFloat {
-        // Enough width for 10 average plates (~24 width each + spacing)
-        return CGFloat((26 + 4) * 10)
+        .padding(.vertical, 35)
     }
 }
 

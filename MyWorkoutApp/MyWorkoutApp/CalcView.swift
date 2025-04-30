@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CalcView: View {
     @State private var selectedTool = 0
-    let tools = ["RPE Calc", "Plate Calc"]
+    let tools = ["Plate Calc","RPE Calc"]
 
     var body: some View {
         NavigationView {
@@ -24,9 +24,9 @@ struct CalcView: View {
                 .padding()
 
                 if selectedTool == 0 {
-                    RPECalculatorView()
-                } else {
                     PlateCalculatorView()
+                } else {
+                    RPECalculatorView()
                 }
             }
             .navigationTitle("Calculator")

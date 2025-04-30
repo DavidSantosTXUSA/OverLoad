@@ -17,23 +17,7 @@ struct PlateCalculatorView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Toggle("Use KG", isOn: Binding(
-                    get: { isKgMode },
-                    set: { newValue in
-                        convertUnits(toKg: newValue)
-                        isKgMode = newValue
-                        calculate()
-                    }
-                ))
-                .foregroundColor(.white)
-                
-                modeToggle
-                
-                Text("Barbell Weight: \(calculatedWeight().clean) \(isKgMode ? "KG" : "LB") | \(isKgMode ? (calculatedWeight() * 2.20462).clean : (calculatedWeight() / 2.20462).clean) \(isKgMode ? "LB" : "KG")")
-                    .font(.title3)
-                    .foregroundColor(.cyan)
-                
+            VStack(alignment: .leading) {
                 if mode == .reverse && !selectedPlates.isEmpty {
                     Button(action: {
                         selectedPlates.removeAll()
@@ -46,12 +30,16 @@ struct PlateCalculatorView: View {
                             .background(Color.white.opacity(0.1))
                             .cornerRadius(8)
                     }
-                    .padding(.bottom, 12)
+                    
                 }
+                Text("Barbell Weight: \(calculatedWeight().clean) \(isKgMode ? "KG" : "LB") | \(isKgMode ? (calculatedWeight() * 2.20462).clean : (calculatedWeight() / 2.20462).clean) \(isKgMode ? "LB" : "KG")")
+                    .font(.title3)
+                    .foregroundColor(.cyan)
+                    .padding(.bottom, 50)
                 
                 let platesToShow = mode == .input ? result : selectedPlates
                 BarbellView(plates: platesToShow, isKgMode: isKgMode)
-                
+
                 if mode == .input {
                     inputFields
                 } else {
@@ -59,14 +47,33 @@ struct PlateCalculatorView: View {
                 }
             }
             .padding(.horizontal)
+            .padding(.bottom, 12)
+            
+            Toggle("Use KG mode: ", isOn: Binding(
+                get: { isKgMode },
+                set: { newValue in
+                    if mode == .reverse {
+                        convertSelectedPlates(toKg: newValue)
+                        convertUnits(toKg: newValue)
+                    } else {
+                        convertUnits(toKg: newValue)
+                    }
+                    isKgMode = newValue
+                    calculate()
+                }
+            ))
+            .foregroundColor(.white)
+            
+            modeToggle
         }
+        
         .background(Color.black.edgesIgnoringSafeArea(.all))
         .dismissKeyboardOnTap()
         .onChange(of: targetWeight) { _ in calculate() }
         .onChange(of: barWeight) { _ in calculate() }
     }
     private var inputFields: some View {
-        VStack {
+        VStack(spacing: 8) {
             HStack {
                 Text("Target Weight:")
                     .foregroundColor(.white)
@@ -75,6 +82,7 @@ struct PlateCalculatorView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .dismissKeyboardOnTap()
             }
+            .padding(.top, 40)
             
             HStack {
                 Text("Bar Weight:")
@@ -110,18 +118,23 @@ struct PlateCalculatorView: View {
     }
 
     func convertUnits(toKg: Bool) {
-        guard let target = Double(targetWeight) else { return }
-
         if toKg {
-            let newTarget = ceil((target / 2.20462) * 10) / 10
-            targetWeight = String(format: "%.1f", newTarget)
+            // Convert target only in input mode
+            if mode == .input, let target = Double(targetWeight) {
+                let newTarget = ceil((target / 2.20462) * 10) / 10
+                targetWeight = String(format: "%.1f", newTarget)
+            }
             barWeight = "20"
         } else {
-            let newTarget = ceil((target * 2.20462) * 10) / 10
-            targetWeight = String(format: "%.1f", newTarget)
+            if mode == .input, let target = Double(targetWeight) {
+                let newTarget = ceil((target * 2.20462) * 10) / 10
+                targetWeight = String(format: "%.1f", newTarget)
+            }
             barWeight = "45"
         }
     }
+
+
 
     func calculate() {
         guard let total = Double(targetWeight),
@@ -131,24 +144,92 @@ struct PlateCalculatorView: View {
             return
         }
 
-        var perSide = (total - bar) / 2
         let plates = isKgMode ? kgPlates : lbPlates
+        var perSide = (total - bar) / 2
         var usedPlates: [Double] = []
 
         for plate in plates {
-            while (perSide - plate) >= -0.01 {
-                usedPlates.append(plate)
-                perSide -= plate
+            let count = Int(perSide / plate)
+            if count > 0 {
+                usedPlates += Array(repeating: plate, count: count)
+                perSide -= Double(count) * plate
             }
         }
 
-        let loadedWeight = usedPlates.reduce(0, +) * 2 + bar
-        if loadedWeight < total {
-            if let smallest = plates.last, (total - loadedWeight) >= smallest {
-                usedPlates.append(smallest)
-            }
+        // Slight over if needed
+        if perSide > 0.01, let smallest = plates.last {
+            usedPlates.append(smallest)
         }
 
         result = usedPlates
     }
+
+    func reducePlateCount(_ platesUsed: [Double], availablePlates: [Double]) -> [Double] {
+        var plateCounts = Dictionary(grouping: platesUsed, by: { $0 }).mapValues { $0.count }
+
+        // Try to replace two smaller plates with one larger when possible
+        for (i, smaller) in availablePlates.reversed().enumerated() {
+            for larger in availablePlates.dropLast(i + 1).reversed() {
+                let needed = Int(larger / smaller)
+                while plateCounts[smaller, default: 0] >= needed {
+                    plateCounts[smaller]! -= needed
+                    plateCounts[larger, default: 0] += 1
+                }
+            }
+        }
+
+        // Reconstruct the plate list
+        return plateCounts.flatMap { plate, count in Array(repeating: plate, count: count) }
+    }
+    func convertSelectedPlates(toKg: Bool) {
+        let conversionFactor = 2.20462
+
+        let sourcePlates = toKg ? lbPlates : kgPlates
+        let targetPlates = toKg ? kgPlates : lbPlates
+
+        let converted = selectedPlates.map { plate in
+            let convertedWeight = toKg ? plate / conversionFactor : plate * conversionFactor
+            // Snap to closest available plate in target system
+            return targetPlates.min(by: { abs($0 - convertedWeight) < abs($1 - convertedWeight) }) ?? convertedWeight
+        }
+
+        selectedPlates = converted
+    }
+
+    /*
+     func calculate() {
+         guard let total = Double(targetWeight),
+               let bar = Double(barWeight),
+               total > bar else {
+             result = []
+             return
+         }
+
+         var perSide = (total - bar) / 2
+         let plates = isKgMode ? kgPlates : lbPlates
+         var usedPlates: [Double] = []
+
+         for plate in plates {
+             while (perSide - plate) >= -0.01 {
+                 usedPlates.append(plate)
+                 perSide -= plate
+             }
+         }
+         
+         if perSide > 0.01 {
+             if let smallest = plates.last {
+                 usedPlates.append(smallest)
+             }
+         }
+
+         let loadedWeight = usedPlates.reduce(0, +) * 2 + bar
+         if loadedWeight < total {
+             if let smallest = plates.last, (total - loadedWeight) >= smallest {
+                 usedPlates.append(smallest)
+             }
+         }
+
+         result = usedPlates
+     }
+     */
 }

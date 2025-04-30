@@ -52,6 +52,7 @@ struct PlateView: View {
                         .bold()
                         .foregroundColor(.white)
                         .shadow(color: .black, radius: 1, x: 0, y: 0)
+                        .lineLimit(1)
 
                 }
 
@@ -145,12 +146,17 @@ struct PlateView: View {
 
 extension Double {
     var clean: String {
-        if truncatingRemainder(dividingBy: 1) == 0 {
+        if self == 0.25 || self == 0.5 || self == 1.25 {
+            return String(format: "%.2f", self)
+        } else if self == 2.5 {
+            return String(format: "%.1f", self)
+        } else if truncatingRemainder(dividingBy: 1) == 0 {
             return String(Int(self))
-        } else if self < 2 {
-            return String(format: "%.2f", self) // show full detail for smaller plates
         } else {
             return String(format: "%.1f", self)
         }
     }
 }
+
+
+

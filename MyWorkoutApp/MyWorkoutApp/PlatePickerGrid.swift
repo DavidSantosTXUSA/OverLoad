@@ -5,7 +5,7 @@ struct PlatePickerGrid: View {
     let isKgMode: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading) {
             Text("Load Plates!")
                 .font(.headline)
                 .foregroundColor(.white)
@@ -17,7 +17,7 @@ struct PlatePickerGrid: View {
                 ForEach(plates, id: \.self) { plate in
                     VStack {
                         Text(plate.clean)
-                            .font(.caption)
+                            .font(.caption2)
                                 .bold()
                                 .foregroundColor(.white)
                                 .frame(width: 25, height: 25)

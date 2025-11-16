@@ -350,27 +350,27 @@ MyWorkoutApp/
     <tr>
       <td align="center">
         <h4>Workouts Tab</h4>
-        <img src="./simulator_screenshot_911A8188-90FA-4B2A-B07E-659AE255167D.png" alt="Workouts Screen" width="250">
+        <img src="./workouts-tab.png" alt="Workouts Screen" width="250">
       </td>
       <td align="center">
         <h4>Plate Calculator</h4>
-        <img src="./simulator_screenshot_3D74D19B-3F22-46DD-9E8D-9EDA4729FC61.png" alt="Plate Calculator" width="250">
+        <img src="./plate-calculator.png" alt="Plate Calculator" width="250">
       </td>
     </tr>
     <tr>
       <td align="center">
         <h4>RPE Calculator</h4>
-        <img src="./simulator_screenshot_49CEB39F-3731-4286-B222-8C737EE8FD74.png" alt="RPE Calculator" width="250">
+        <img src="./rpe-calculator.png" alt="RPE Calculator" width="250">
       </td>
       <td align="center">
         <h4>Progress Tab</h4>
-        <img src="./simulator_screenshot_5EC241BC-358C-4927-819A-88067E2F398A.png" alt="Progress Screen" width="250">
+        <img src="./progress-tab.png" alt="Progress Screen" width="250">
       </td>
     </tr>
     <tr>
       <td align="center" colspan="2">
         <h4>Workout Detail</h4>
-        <img src="./simulator_screenshot_FFC4CB42-6B3D-437B-AE66-5655456977BB.png" alt="Workout Detail Screen" width="250">
+        <img src="./workout-detail.png" alt="Workout Detail Screen" width="250">
       </td>
     </tr>
   </table>

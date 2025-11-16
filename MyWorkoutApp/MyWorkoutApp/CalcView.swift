@@ -26,6 +26,7 @@ struct CalcView: View {
             }
             .navigationTitle("Calculator")
             .navigationBarTitleDisplayMode(.inline) // Compact title
+            .font(.system(size: 20, weight: .bold, design: .rounded))
             .background(Color.black.edgesIgnoringSafeArea(.all))
         }
         .preferredColorScheme(.dark)

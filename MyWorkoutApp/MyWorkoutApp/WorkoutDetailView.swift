@@ -59,6 +59,7 @@ struct WorkoutDetailView: View {
                                 VStack(alignment: .leading, spacing: 4) {
                                     HStack {
                                         Text("Set \(setIndex + 1)")
+                                            .font(.system(size: 16, weight: .semibold, design: .rounded))
                                             .foregroundColor(.white)
                                         Spacer()
                                         
@@ -67,7 +68,7 @@ struct WorkoutDetailView: View {
                                                 restTimer.start(duration: restTimerDuration)
                                             }) {
                                                 Text("Complete")
-                                                    .font(.caption)
+                                                    .font(.system(size: 12, weight: .semibold, design: .rounded))
                                                     .foregroundColor(.green)
                                                     .padding(.horizontal, 8)
                                                     .padding(.vertical, 4)
@@ -86,6 +87,7 @@ struct WorkoutDetailView: View {
 
                                     HStack {
                                         Text("Reps:")
+                                            .font(.system(size: 15, weight: .medium, design: .rounded))
                                             .foregroundColor(.gray)
                                             .frame(width: 60, alignment: .leading)
                                         
@@ -147,6 +149,7 @@ struct WorkoutDetailView: View {
 
                                     HStack {
                                         Text("Weight:")
+                                            .font(.system(size: 15, weight: .medium, design: .rounded))
                                             .foregroundColor(.gray)
                                             .frame(width: 60, alignment: .leading)
                                         

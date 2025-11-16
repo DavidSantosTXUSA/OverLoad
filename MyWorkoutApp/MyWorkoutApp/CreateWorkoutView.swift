@@ -21,7 +21,7 @@ struct CreateWorkoutView: View {
                 VStack(spacing: 20) {
                     Group {
                         Text("Workout Details")
-                            .font(.headline)
+                            .font(.system(size: 20, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -34,7 +34,7 @@ struct CreateWorkoutView: View {
 
                     Group {
                         Text("Add New Exercise")
-                            .font(.headline)
+                            .font(.system(size: 20, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -74,7 +74,7 @@ struct CreateWorkoutView: View {
 
                     Group {
                         Text("Select Exercises")
-                            .font(.headline)
+                            .font(.system(size: 20, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -82,6 +82,7 @@ struct CreateWorkoutView: View {
                             ForEach(exerciseLibraryViewModel.exercises) { exercise in
                                 HStack {
                                     Text(exercise.name)
+                                        .font(.system(size: 16, weight: .semibold, design: .rounded))
                                         .foregroundColor(.cyan)
                                     Spacer()
                                     if selectedExercises.contains(where: { $0.id == exercise.id }) {
@@ -106,12 +107,13 @@ struct CreateWorkoutView: View {
 
                     Group {
                         Text("Exercises in Workout")
-                            .font(.headline)
+                            .font(.system(size: 20, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                         ForEach(selectedExercises) { exercise in
                             Text(exercise.name)
+                                .font(.system(size: 16, weight: .medium, design: .rounded))
                                 .foregroundColor(.white)
                                 .padding()
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -124,7 +126,7 @@ struct CreateWorkoutView: View {
                     Button("Save Workout") {
                         saveWorkoutTemplate()
                     }
-                    .font(.headline)
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(workoutName.isEmpty || selectedExercises.isEmpty ? Color.gray : Color.green)

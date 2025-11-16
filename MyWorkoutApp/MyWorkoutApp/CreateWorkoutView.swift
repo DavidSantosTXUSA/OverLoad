@@ -78,30 +78,34 @@ struct CreateWorkoutView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        List {
-                            ForEach(exerciseLibraryViewModel.exercises) { exercise in
-                                HStack {
-                                    Text(exercise.name)
-                                        .font(.system(size: 16, weight: .semibold, design: .rounded))
-                                        .foregroundColor(.cyan)
-                                    Spacer()
-                                    if selectedExercises.contains(where: { $0.id == exercise.id }) {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(.green)
+                        ScrollView {
+                            VStack(spacing: 8) {
+                                ForEach(exerciseLibraryViewModel.exercises) { exercise in
+                                    Button(action: {
+                                        toggleExerciseSelection(exercise: exercise)
+                                    }) {
+                                        HStack {
+                                            Text(exercise.name)
+                                                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                                                .foregroundColor(.cyan)
+                                            Spacer()
+                                            if selectedExercises.contains(where: { $0.id == exercise.id }) {
+                                                Image(systemName: "checkmark.circle.fill")
+                                                    .foregroundColor(.green)
+                                                    .font(.system(size: 20))
+                                            }
+                                        }
+                                        .padding(.vertical, 12)
+                                        .padding(.horizontal, 16)
+                                        .background(Color.gray.opacity(0.1))
+                                        .cornerRadius(8)
                                     }
-                                }
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    toggleExerciseSelection(exercise: exercise)
+                                    .buttonStyle(PlainButtonStyle())
                                 }
                             }
-                            .onDelete { offsets in
-                                exerciseToDelete = offsets
-                                showDeleteExerciseConfirmation = true
-                            }
+                            .padding(.vertical, 4)
                         }
                         .frame(height: 250)
-                        .scrollContentBackground(.hidden)
                         .background(Color.clear)
                     }
 
@@ -140,7 +144,15 @@ struct CreateWorkoutView: View {
         }
         .navigationTitle("Create Workout")
         .toolbar {
-            EditButton().foregroundColor(.green)
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    isEditingExercises.toggle()
+                }) {
+                    Text(isEditingExercises ? "Done" : "Edit")
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .foregroundColor(.green)
+                }
+            }
         }
         .preferredColorScheme(.dark)
         .dismissKeyboardOnTap()

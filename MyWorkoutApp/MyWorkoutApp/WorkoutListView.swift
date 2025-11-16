@@ -54,32 +54,44 @@ struct WorkoutListView: View {
                         .foregroundColor(.cyan)
                         .font(.system(size: 16, weight: .bold, design: .rounded))) {
                         ForEach(workoutTemplateViewModel.workoutTemplates) { template in
-                            HStack {
-                                NavigationLink(destination: WorkoutDetailView(
-                                    workoutSessionViewModel: workoutSessionViewModel,
-                                    template: template)
-                                ) {
-                                    HStack {
-                                        Image(systemName: "bolt.fill")
-                                            .foregroundColor(.green)
-                                        Text(template.name)
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 19, weight: .heavy, design: .rounded))
+                            HStack(spacing: 12) {
+                                // Workout button - starts workout
+                                Button(action: {
+                                    // Navigate to workout detail
+                                }) {
+                                    NavigationLink(destination: WorkoutDetailView(
+                                        workoutSessionViewModel: workoutSessionViewModel,
+                                        template: template)
+                                    ) {
+                                        HStack {
+                                            Image(systemName: "bolt.fill")
+                                                .foregroundColor(.green)
+                                            Text(template.name)
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 19, weight: .heavy, design: .rounded))
+                                        }
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(Color.gray.opacity(0.3))
+                                        .cornerRadius(10)
+                                        .shadow(color: .green.opacity(0.4), radius: 4, x: 0, y: 2)
                                     }
-                                    .padding()
-                                    .background(Color.gray.opacity(0.3))
-                                    .cornerRadius(10)
-                                    .shadow(color: .green.opacity(0.4), radius: 4, x: 0, y: 2)
+                                    .buttonStyle(PlainButtonStyle())
                                 }
                                 
+                                // Edit button - only for editing
                                 Button(action: {
                                     selectedTemplateForEdit = template
                                     showEditTemplate = true
                                 }) {
                                     Image(systemName: "pencil")
                                         .foregroundColor(.cyan)
-                                        .padding(8)
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .padding(12)
+                                        .background(Color.gray.opacity(0.2))
+                                        .cornerRadius(8)
                                 }
+                                .buttonStyle(PlainButtonStyle())
                             }
                             .listRowBackground(Color.clear)
                         }

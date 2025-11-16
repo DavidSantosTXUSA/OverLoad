@@ -6,31 +6,31 @@ struct RPECalcSection: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                // Unit Toggle Header
+                // Unit Toggle Header - very compact
                 HStack {
                     Spacer()
                     unitToggleButton
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 4)
-                .padding(.bottom, 8)
+                .padding(.top, 2)
+                .padding(.bottom, 6)
                 
                 // Last Set Card
                 lastSetCard
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 8)
                 
                 // Next Set Card
                 nextSetCard
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 6)
                 
-                // Info Text (compact)
+                // Info Text (very compact)
                 infoText
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 4)
                 
-                Spacer()
+                Spacer(minLength: 0)
             }
         }
         .background(Color.black)
@@ -48,15 +48,15 @@ struct RPECalcSection: View {
                 viewModel.calculate1RM()
             }
         }) {
-            HStack(spacing: 6) {
+            HStack(spacing: 5) {
                 Image(systemName: "arrow.left.arrow.right")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold))
                 Text(viewModel.isKgMode ? "KG" : "LB")
-                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
             }
             .foregroundColor(.white)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.gray.opacity(0.25))
@@ -71,71 +71,73 @@ struct RPECalcSection: View {
     // MARK: - Last Set Card
     
     private var lastSetCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             // Title
             Text("Last Set")
-                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .font(.system(size: 15, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
             
-            // Weight Input
-            rpeInputField(
-                label: "Weight",
-                text: $viewModel.lastSetWeight,
-                placeholder: viewModel.isKgMode ? "100" : "225",
-                keyboardType: .decimalPad,
-                range: nil
-            )
+            // Weight and Reps side by side
+            HStack(spacing: 10) {
+                rpeInputField(
+                    label: "Weight",
+                    text: $viewModel.lastSetWeight,
+                    placeholder: viewModel.isKgMode ? "100" : "225",
+                    keyboardType: .decimalPad,
+                    range: nil
+                )
+                
+                rpeInputField(
+                    label: "Reps",
+                    text: $viewModel.lastSetReps,
+                    placeholder: "5",
+                    keyboardType: .numberPad,
+                    range: "1-15"
+                )
+            }
             
-            // Reps Input
-            rpeInputField(
-                label: "Reps",
-                text: $viewModel.lastSetReps,
-                placeholder: "5",
-                keyboardType: .numberPad,
-                range: "1 - 15"
-            )
-            
-            // RPE Input
+            // RPE Input (full width)
             rpeInputField(
                 label: "RPE",
                 text: $viewModel.lastSetRPE,
                 placeholder: "9.5",
                 keyboardType: .decimalPad,
-                range: "7.5 - 10.0"
+                range: "7.5-10.0"
             )
             
-            // e1RM Output
+            // e1RM Output - compact
             HStack {
                 Text("e1RM*")
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundColor(.gray)
                 
                 Spacer()
                 
                 if let e1RM = viewModel.estimated1RM {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 4) {
                         Text(formatWeight(e1RM))
-                            .font(.system(size: 22, weight: .heavy, design: .rounded))
+                            .font(.system(size: 20, weight: .heavy, design: .rounded))
                             .foregroundColor(.red)
                         Text(viewModel.isKgMode ? "KG" : "LB")
-                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
                             .foregroundColor(.red.opacity(0.8))
                     }
                 } else {
                     Text("-")
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
                         .foregroundColor(.gray.opacity(0.5))
                 }
             }
+            .padding(.top, 2)
             
-            // Note
+            // Note - very small
             Text("*e1RM = estimated 1 rep max")
-                .font(.system(size: 10, weight: .regular, design: .rounded))
-                .foregroundColor(.gray.opacity(0.7))
+                .font(.system(size: 9, weight: .regular, design: .rounded))
+                .foregroundColor(.gray.opacity(0.6))
         }
-        .padding(16)
+        .padding(12)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 10)
                 .fill(Color.gray.opacity(0.15))
         )
         .onChange(of: viewModel.lastSetWeight) { _ in
@@ -152,57 +154,59 @@ struct RPECalcSection: View {
     // MARK: - Next Set Card
     
     private var nextSetCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             // Title
             Text("Next Set")
-                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .font(.system(size: 15, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
             
-            // Reps Input
-            rpeInputField(
-                label: "Reps",
-                text: $viewModel.nextSetReps,
-                placeholder: "5",
-                keyboardType: .numberPad,
-                range: "1 - 15"
-            )
+            // Reps and RPE side by side
+            HStack(spacing: 10) {
+                rpeInputField(
+                    label: "Reps",
+                    text: $viewModel.nextSetReps,
+                    placeholder: "5",
+                    keyboardType: .numberPad,
+                    range: "1-15"
+                )
+                
+                rpeInputField(
+                    label: "RPE",
+                    text: $viewModel.nextSetRPE,
+                    placeholder: "9.5",
+                    keyboardType: .decimalPad,
+                    range: "7.5-10.0"
+                )
+            }
             
-            // RPE Input
-            rpeInputField(
-                label: "RPE",
-                text: $viewModel.nextSetRPE,
-                placeholder: "9.5",
-                keyboardType: .decimalPad,
-                range: "7.5 - 10.0"
-            )
-            
-            // Weight Output
+            // Weight Output - compact
             HStack {
                 Text("Weight")
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundColor(.gray)
                 
                 Spacer()
                 
                 if let weight = viewModel.nextSetWeight {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 4) {
                         Text(formatWeight(weight))
-                            .font(.system(size: 22, weight: .heavy, design: .rounded))
+                            .font(.system(size: 20, weight: .heavy, design: .rounded))
                             .foregroundColor(.red)
                         Text(viewModel.isKgMode ? "KG" : "LB")
-                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
                             .foregroundColor(.red.opacity(0.8))
                     }
                 } else {
                     Text("-")
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
                         .foregroundColor(.gray.opacity(0.5))
                 }
             }
+            .padding(.top, 2)
         }
-        .padding(16)
+        .padding(12)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 10)
                 .fill(Color.gray.opacity(0.15))
         )
         .onChange(of: viewModel.nextSetReps) { _ in
@@ -225,27 +229,27 @@ struct RPECalcSection: View {
         keyboardType: UIKeyboardType,
         range: String?
     ) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(label)
-                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .foregroundColor(.gray)
                 
                 Spacer()
                 
                 if let range = range {
                     Text(range)
-                        .font(.system(size: 11, weight: .regular, design: .rounded))
+                        .font(.system(size: 10, weight: .regular, design: .rounded))
                         .foregroundColor(.gray.opacity(0.6))
                 }
             }
             
             TextField(placeholder, text: text)
                 .keyboardType(keyboardType)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .font(.system(size: 15, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
-                .padding(.vertical, 10)
-                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color.gray.opacity(0.1))
@@ -265,26 +269,26 @@ struct RPECalcSection: View {
     // MARK: - Info Text
     
     private var infoText: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
             Text("RPE & RIR are two forms of autoregulation training tools")
-                .font(.system(size: 11, weight: .regular, design: .rounded))
-                .foregroundColor(.gray.opacity(0.7))
+                .font(.system(size: 9, weight: .regular, design: .rounded))
+                .foregroundColor(.gray.opacity(0.6))
             
-            HStack(spacing: 4) {
+            HStack(spacing: 3) {
                 Text("Rate of Perceived Exertion")
-                    .font(.system(size: 11, weight: .regular, design: .rounded))
-                    .foregroundColor(.gray.opacity(0.7))
+                    .font(.system(size: 9, weight: .regular, design: .rounded))
+                    .foregroundColor(.gray.opacity(0.6))
                 Text("(RPE)")
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                    .font(.system(size: 9, weight: .bold, design: .rounded))
                     .foregroundColor(.red)
             }
             
-            HStack(spacing: 4) {
+            HStack(spacing: 3) {
                 Text("Reps In Reserve")
-                    .font(.system(size: 11, weight: .regular, design: .rounded))
-                    .foregroundColor(.gray.opacity(0.7))
+                    .font(.system(size: 9, weight: .regular, design: .rounded))
+                    .foregroundColor(.gray.opacity(0.6))
                 Text("(RIR)")
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                    .font(.system(size: 9, weight: .bold, design: .rounded))
                     .foregroundColor(.red)
             }
         }

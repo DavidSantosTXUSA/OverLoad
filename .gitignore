@@ -60,9 +60,12 @@ GoogleService-Info.plist
 .bmad-*/
 *.bmad
 
-# Markdown files (except README.md)
+# Markdown files (except documentation files)
 *.md
 !README.md
+!CONTRIBUTING.md
+!ARCHITECTURE.md
+!DEVELOPMENT.md
 
 # Cursor IDE files
 .cursor/

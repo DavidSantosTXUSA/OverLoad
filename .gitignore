@@ -12,6 +12,10 @@ DerivedData/
 *.perspectivev3
 xcuserdata/
 *.xcscmblueprint
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcodeproj.zip
+*.xcuserstate
 
 # SwiftPM
 .build/
@@ -45,4 +49,20 @@ GoogleService-Info.plist
 # Zip & temp files
 *.zip
 *.tmp
+
+# BMAD files (development tools - not for open source)
+.bmad-core/
+.bmad/
+.bmad-*/
+*.bmad
+
+# Markdown files (except README.md)
+*.md
+!README.md
+
+# Cursor IDE files
+.cursor/
+
+# Gemini files
+.gemini/
 

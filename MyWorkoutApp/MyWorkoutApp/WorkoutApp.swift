@@ -23,7 +23,7 @@ struct WorkoutApp: App {
                         Image(systemName: "function")
                         Text("Calc")
                     }
-                ProgressView(workoutSessionViewModel: workoutSessionViewModel)
+                WorkoutProgressView(workoutSessionViewModel: workoutSessionViewModel)
                     .tabItem {
                         Image(systemName: "chart.bar.xaxis")
                         Text("Progress")

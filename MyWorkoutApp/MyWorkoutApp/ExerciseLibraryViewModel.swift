@@ -2,34 +2,47 @@ import Foundation
 
 class ExerciseLibraryViewModel: ObservableObject {
     @Published var exercises: [Exercise] = []
-
-    init() {
-        loadExercises()
-    }
-
-    func addExercise(name: String) {
-        let newExercise = Exercise(name: name)
-        exercises.append(newExercise)
-        saveExercises()
-    }
-
-    func removeExercise(at offsets: IndexSet) {
-        exercises.remove(atOffsets: offsets)
-        saveExercises()  // Save the updated exercise list
-    }
-
-    func saveExercises() {
-        if let encoded = try? JSONEncoder().encode(exercises) {
-            UserDefaults.standard.set(encoded, forKey: "exercises")
+    @Published var lastError: AppError?
+    
+    private let persistenceService: PersistenceService
+    
+    init(persistenceService: PersistenceService = UserDefaultsPersistenceService()) {
+        self.persistenceService = persistenceService
+        do {
+            try loadExercises()
+        } catch {
+            if let appError = error as? AppError {
+                lastError = appError
+            } else {
+                lastError = AppError.persistenceError(error.localizedDescription)
+            }
         }
     }
 
-    func loadExercises() {
-        if let data = UserDefaults.standard.data(forKey: "exercises"),
-           let decoded = try? JSONDecoder().decode([Exercise].self, from: data) {
-            exercises = decoded
+    func addExercise(name: String) throws {
+        let newExercise = Exercise(name: name)
+        exercises.append(newExercise)
+        try saveExercises()
+    }
+
+    func removeExercise(at offsets: IndexSet) throws {
+        exercises.remove(atOffsets: offsets)
+        try saveExercises()
+    }
+
+    func saveExercises() throws {
+        try persistenceService.save(exercises, forKey: "exercises")
+    }
+
+    func loadExercises() throws {
+        exercises = try persistenceService.load([Exercise].self, forKey: "exercises")
+    }
+    
+    func handleError(_ error: Error) {
+        if let appError = error as? AppError {
+            lastError = appError
         } else {
-            exercises = []
+            lastError = AppError.persistenceError(error.localizedDescription)
         }
     }
 }

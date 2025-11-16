@@ -2,37 +2,72 @@ import Foundation
 
 class WorkoutSessionViewModel: ObservableObject {
     @Published var workoutSessions: [WorkoutSession] = []
-
-    init() {
-        loadWorkoutSessions()
+    @Published var activeWorkout: WorkoutSession?
+    @Published var lastError: AppError?
+    
+    private let persistenceService: PersistenceService
+    
+    init(persistenceService: PersistenceService = UserDefaultsPersistenceService()) {
+        self.persistenceService = persistenceService
+        do {
+            try loadWorkoutSessions()
+            try loadActiveWorkout()
+        } catch {
+            if let appError = error as? AppError {
+                lastError = appError
+            } else {
+                lastError = AppError.persistenceError(error.localizedDescription)
+            }
+        }
     }
 
-    func addWorkoutSession(_ session: WorkoutSession) {
+    func addWorkoutSession(_ session: WorkoutSession) throws {
         workoutSessions.append(session)
         workoutSessions.sort { $0.date > $1.date }
-        saveWorkoutSessions()
+        try saveWorkoutSessions()
     }
-
-    func saveWorkoutSessions() {
-        do {
-            let encoded = try JSONEncoder().encode(workoutSessions)
-            UserDefaults.standard.set(encoded, forKey: "workoutSessions")
-        } catch {
-            print("❌ Failed to encode workout sessions:", error)
+    
+    func updateWorkoutSession(_ session: WorkoutSession) throws {
+        if let index = workoutSessions.firstIndex(where: { $0.id == session.id }) {
+            workoutSessions[index] = session
+            workoutSessions.sort { $0.date > $1.date }
+            try saveWorkoutSessions()
         }
     }
-
-    func loadWorkoutSessions() {
-        if let data = UserDefaults.standard.data(forKey: "workoutSessions") {
-            do {
-                let decoded = try JSONDecoder().decode([WorkoutSession].self, from: data)
-                workoutSessions = decoded.sorted { $0.date > $1.date }
-            } catch {
-                print("❌ Failed to decode workout sessions:", error)
-                workoutSessions = []
-            }
+    
+    func saveActiveWorkout(_ session: WorkoutSession) throws {
+        activeWorkout = session
+        try persistenceService.save(session, forKey: "activeWorkout")
+    }
+    
+    func loadActiveWorkout() throws {
+        activeWorkout = try persistenceService.load(WorkoutSession.self, forKey: "activeWorkout")
+    }
+    
+    func clearActiveWorkout() {
+        activeWorkout = nil
+        persistenceService.remove(forKey: "activeWorkout")
+    }
+    
+    func handleError(_ error: Error) {
+        if let appError = error as? AppError {
+            lastError = appError
         } else {
-            workoutSessions = []
+            lastError = AppError.persistenceError(error.localizedDescription)
         }
+    }
+    
+    func resumeWorkout() -> WorkoutSession? {
+        guard let workout = activeWorkout, workout.isInProgress else { return nil }
+        return workout
+    }
+
+    func saveWorkoutSessions() throws {
+        try persistenceService.save(workoutSessions, forKey: "workoutSessions")
+    }
+
+    func loadWorkoutSessions() throws {
+        workoutSessions = try persistenceService.load([WorkoutSession].self, forKey: "workoutSessions")
+        workoutSessions.sort { $0.date > $1.date }
     }
 }

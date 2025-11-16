@@ -12,6 +12,8 @@ struct EditWorkoutView: View {
     @ObservedObject var workoutSessionViewModel: WorkoutSessionViewModel
     @State var workoutSession: WorkoutSession
     @Environment(\.presentationMode) var presentationMode
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
 
     var body: some View {
         ZStack {
@@ -47,7 +49,8 @@ struct EditWorkoutView: View {
                                                 String(workoutSession.exerciseEntries[exerciseIndex].sets[setIndex].reps)
                                             },
                                             set: { newValue in
-                                                workoutSession.exerciseEntries[exerciseIndex].sets[setIndex].reps = Int(newValue) ?? 0
+                                                let reps = Int(newValue) ?? 0
+                                                workoutSession.exerciseEntries[exerciseIndex].sets[setIndex].reps = InputValidators.clampReps(reps)
                                             }
                                         ))
                                         .keyboardType(.numberPad)
@@ -63,7 +66,8 @@ struct EditWorkoutView: View {
                                                 String(workoutSession.exerciseEntries[exerciseIndex].sets[setIndex].weight)
                                             },
                                             set: { newValue in
-                                                workoutSession.exerciseEntries[exerciseIndex].sets[setIndex].weight = Double(newValue) ?? 0.0
+                                                let weight = Double(newValue) ?? 0.0
+                                                workoutSession.exerciseEntries[exerciseIndex].sets[setIndex].weight = InputValidators.clampWeight(weight)
                                             }
                                         ))
                                         .keyboardType(.decimalPad)
@@ -110,6 +114,11 @@ struct EditWorkoutView: View {
         }
         .navigationTitle("Edit \(workoutSession.name)")
         .preferredColorScheme(.dark)
+        .alert("Error", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(errorMessage)
+        }
     }
 
     func addSet(to exerciseIndex: Int) {
@@ -123,8 +132,13 @@ struct EditWorkoutView: View {
     func saveEdits() {
         if let index = workoutSessionViewModel.workoutSessions.firstIndex(where: { $0.id == workoutSession.id }) {
             workoutSessionViewModel.workoutSessions[index] = workoutSession
-            workoutSessionViewModel.saveWorkoutSessions()
-            presentationMode.wrappedValue.dismiss()
+            do {
+                try workoutSessionViewModel.saveWorkoutSessions()
+                presentationMode.wrappedValue.dismiss()
+            } catch {
+                errorMessage = error.localizedDescription
+                showErrorAlert = true
+            }
         }
     }
 }

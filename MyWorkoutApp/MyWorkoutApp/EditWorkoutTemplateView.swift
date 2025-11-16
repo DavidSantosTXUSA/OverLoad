@@ -1,22 +1,30 @@
 import SwiftUI
 
-struct CreateWorkoutView: View {
+struct EditWorkoutTemplateView: View {
     @ObservedObject var workoutTemplateViewModel: WorkoutTemplateViewModel
     @ObservedObject var exerciseLibraryViewModel: ExerciseLibraryViewModel
     @Environment(\.presentationMode) var presentationMode
-
-    @State private var workoutName: String = ""
-    @State private var selectedExercises: [Exercise] = []
-    @State private var newExerciseName: String = ""
+    
+    @State var template: WorkoutTemplate
+    @State private var workoutName: String
+    @State private var selectedExercises: [Exercise]
     @State private var showErrorAlert = false
     @State private var errorMessage = ""
     @State private var showDeleteExerciseConfirmation = false
     @State private var exerciseToDelete: IndexSet?
-
+    
+    init(workoutTemplateViewModel: WorkoutTemplateViewModel, exerciseLibraryViewModel: ExerciseLibraryViewModel, template: WorkoutTemplate) {
+        self.workoutTemplateViewModel = workoutTemplateViewModel
+        self.exerciseLibraryViewModel = exerciseLibraryViewModel
+        self._template = State(initialValue: template)
+        self._workoutName = State(initialValue: template.name)
+        self._selectedExercises = State(initialValue: template.exercises)
+    }
+    
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
-
+            
             ScrollView {
                 VStack(spacing: 20) {
                     Group {
@@ -24,60 +32,20 @@ struct CreateWorkoutView: View {
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
-
+                        
                         TextField("Workout Name", text: $workoutName)
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(8)
                             .foregroundColor(.white)
                     }
-
-                    Group {
-                        Text("Add New Exercise")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                        HStack {
-                            TextField("Exercise Name", text: $newExerciseName)
-                                .padding()
-                                .background(Color.gray.opacity(0.2))
-                                .cornerRadius(8)
-                                .foregroundColor(.white)
-
-                            Button(action: {
-                                let trimmedName = newExerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
-                                if !trimmedName.isEmpty {
-                                    // Check for duplicates
-                                    if exerciseLibraryViewModel.exercises.contains(where: { $0.name.lowercased() == trimmedName.lowercased() }) {
-                                        errorMessage = "An exercise with this name already exists."
-                                        showErrorAlert = true
-                                        return
-                                    }
-                                    
-                                    do {
-                                        try exerciseLibraryViewModel.addExercise(name: trimmedName)
-                                        newExerciseName = ""
-                                    } catch {
-                                        errorMessage = error.localizedDescription
-                                        showErrorAlert = true
-                                    }
-                                }
-                            }) {
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.title2)
-                                    .foregroundColor(.green)
-                                    .shadow(color: .green.opacity(0.5), radius: 4)
-                            }
-                        }
-                    }
-
+                    
                     Group {
                         Text("Select Exercises")
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
-
+                        
                         List {
                             ForEach(exerciseLibraryViewModel.exercises) { exercise in
                                 HStack {
@@ -103,13 +71,13 @@ struct CreateWorkoutView: View {
                         .scrollContentBackground(.hidden)
                         .background(Color.clear)
                     }
-
+                    
                     Group {
                         Text("Exercises in Workout")
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .leading)
-
+                        
                         ForEach(selectedExercises) { exercise in
                             Text(exercise.name)
                                 .foregroundColor(.white)
@@ -120,9 +88,9 @@ struct CreateWorkoutView: View {
                         }
                         .onDelete(perform: removeExercise)
                     }
-
-                    Button("Save Workout") {
-                        saveWorkoutTemplate()
+                    
+                    Button("Save Changes") {
+                        saveTemplate()
                     }
                     .font(.headline)
                     .padding()
@@ -136,7 +104,7 @@ struct CreateWorkoutView: View {
                 .padding()
             }
         }
-        .navigationTitle("Create Workout")
+        .navigationTitle("Edit Workout")
         .toolbar {
             EditButton().foregroundColor(.green)
         }
@@ -166,7 +134,7 @@ struct CreateWorkoutView: View {
             Text("Are you sure you want to delete this exercise? This will remove it from your exercise library.")
         }
     }
-
+    
     func toggleExerciseSelection(exercise: Exercise) {
         if let index = selectedExercises.firstIndex(where: { $0.id == exercise.id }) {
             selectedExercises.remove(at: index)
@@ -174,12 +142,12 @@ struct CreateWorkoutView: View {
             selectedExercises.append(exercise)
         }
     }
-
+    
     func removeExercise(at offsets: IndexSet) {
         selectedExercises.remove(atOffsets: offsets)
     }
-
-    func saveWorkoutTemplate() {
+    
+    func saveTemplate() {
         let trimmedName = workoutName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedName.isEmpty else {
             errorMessage = "Workout name cannot be empty."
@@ -193,17 +161,21 @@ struct CreateWorkoutView: View {
             return
         }
         
-        let newTemplate = WorkoutTemplate(
-            name: trimmedName,
-            exercises: selectedExercises
-        )
+        // Update the template
+        template.name = trimmedName
+        template.exercises = selectedExercises
         
-        do {
-            try workoutTemplateViewModel.addWorkoutTemplate(newTemplate)
-            presentationMode.wrappedValue.dismiss()
-        } catch {
-            errorMessage = error.localizedDescription
-            showErrorAlert = true
+        // Update in ViewModel
+        if let index = workoutTemplateViewModel.workoutTemplates.firstIndex(where: { $0.id == template.id }) {
+            workoutTemplateViewModel.workoutTemplates[index] = template
+            do {
+                try workoutTemplateViewModel.saveWorkoutTemplates()
+                presentationMode.wrappedValue.dismiss()
+            } catch {
+                errorMessage = error.localizedDescription
+                showErrorAlert = true
+            }
         }
     }
 }
+

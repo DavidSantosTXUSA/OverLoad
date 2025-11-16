@@ -52,6 +52,7 @@ struct PlateCalcSection: View {
                 .frame(height: geometry.size.height * 0.30) // Reduced to 30% to make room for formula
                 .padding(.horizontal, 20)
                 .padding(.top, viewModel.selectedMode == .input ? 8 : 0) // Extra padding in input mode
+                .padding(.bottom, viewModel.selectedMode == .input ? 12 : 0) // Extra padding below barbell in input mode
                 .background(Color.black)
                 
                 // Bottom section: Controls and Breakdown

@@ -144,9 +144,10 @@ struct SetEntry: Identifiable, Codable, Equatable {
 - Calculates estimated 1RM based on:
   - Weight lifted
   - Number of reps (1-10)
-  - RPE (Rate of Perceived Exertion: 7.5-10.0)
+  - RPE (Rate of Perceived Exertion: 1.0-10.0)
 - Supports both lbs and kg
 - Uses standard RPE percentage tables
+- Two-card layout: "Last Set" (calculates e1RM) and "Next Set" (calculates target weight)
 
 ### Workout Timer
 - Start/stop timer functionality
@@ -343,17 +344,20 @@ MyWorkoutApp/
 
 ## 📸 Screenshots
 
-| Home Screen | Workouts Saved | Workout History |
-|-------------|----------------|-----------------|
-| ![](./Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-03-25%20at%2019.28.52.png) | ![](./Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-03-25%20at%2019.28.55.png) | ![](./Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-03-25%20at%2019.28.59.png) |
+### Workouts Tab
+![Workouts Screen](./simulator_screenshot_911A8188-90FA-4B2A-B07E-659AE255167D.png)
 
-| Workout Creation | Workout Creation | Workout Creation |
-|-------------|------------------|----------|
-| ![](./Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-03-25%20at%2019.29.04.png) | ![](./Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-03-25%20at%2019.29.28.png) | ![](./Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-03-25%20at%2019.30.03.png) |
+### Plate Calculator
+![Plate Calculator](./simulator_screenshot_3D74D19B-3F22-46DD-9E8D-9EDA4729FC61.png)
 
-| New Workout Saved | Workout Logger and Timer | Workout History |
-|-------------------|----------------|----------------|
-| ![](./Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-03-25%20at%2019.30.06.png) | ![](./Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-03-25%20at%2019.30.19.png) | ![](./Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-03-25%20at%2019.30.25.png) |
+### RPE Calculator
+![RPE Calculator](./simulator_screenshot_49CEB39F-3731-4286-B222-8C737EE8FD74.png)
+
+### Progress Tab
+![Progress Screen](./simulator_screenshot_5EC241BC-358C-4927-819A-88067E2F398A.png)
+
+### Workout Detail
+![Workout Detail Screen](./simulator_screenshot_FFC4CB42-6B3D-437B-AE66-5655456977BB.png)
 
 
 ## Future Improvements

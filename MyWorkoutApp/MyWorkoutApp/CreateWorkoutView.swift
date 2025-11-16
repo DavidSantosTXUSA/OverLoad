@@ -143,17 +143,6 @@ struct CreateWorkoutView: View {
             }
         }
         .navigationTitle("Create Workout")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    isEditingExercises.toggle()
-                }) {
-                    Text(isEditingExercises ? "Done" : "Edit")
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
-                        .foregroundColor(.green)
-                }
-            }
-        }
         .preferredColorScheme(.dark)
         .dismissKeyboardOnTap()
         .alert("Error", isPresented: $showErrorAlert) {

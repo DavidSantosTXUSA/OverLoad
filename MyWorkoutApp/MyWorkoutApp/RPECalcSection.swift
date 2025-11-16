@@ -102,7 +102,7 @@ struct RPECalcSection: View {
                 text: $viewModel.lastSetRPE,
                 placeholder: "9.5",
                 keyboardType: .decimalPad,
-                range: "7.5-10.0"
+                range: "1-10"
             )
             
             // e1RM Output - compact
@@ -117,10 +117,10 @@ struct RPECalcSection: View {
                     HStack(spacing: 4) {
                         Text(formatWeight(e1RM))
                             .font(.system(size: 20, weight: .heavy, design: .rounded))
-                            .foregroundColor(.red)
+                            .foregroundColor(.green)
                         Text(viewModel.isKgMode ? "KG" : "LB")
                             .font(.system(size: 12, weight: .bold, design: .rounded))
-                            .foregroundColor(.red.opacity(0.8))
+                            .foregroundColor(.green.opacity(0.8))
                     }
                 } else {
                     Text("-")
@@ -175,7 +175,7 @@ struct RPECalcSection: View {
                     text: $viewModel.nextSetRPE,
                     placeholder: "9.5",
                     keyboardType: .decimalPad,
-                    range: "7.5-10.0"
+                    range: "1-10"
                 )
             }
             
@@ -191,10 +191,10 @@ struct RPECalcSection: View {
                     HStack(spacing: 4) {
                         Text(formatWeight(weight))
                             .font(.system(size: 20, weight: .heavy, design: .rounded))
-                            .foregroundColor(.red)
+                            .foregroundColor(.green)
                         Text(viewModel.isKgMode ? "KG" : "LB")
                             .font(.system(size: 12, weight: .bold, design: .rounded))
-                            .foregroundColor(.red.opacity(0.8))
+                            .foregroundColor(.green.opacity(0.8))
                     }
                 } else {
                     Text("-")
@@ -257,7 +257,7 @@ struct RPECalcSection: View {
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(
                                     !text.wrappedValue.isEmpty ?
-                                    Color.red.opacity(0.6) :
+                                    Color.green.opacity(0.6) :
                                     Color.gray.opacity(0.3),
                                     lineWidth: 1.5
                                 )
@@ -280,7 +280,7 @@ struct RPECalcSection: View {
                     .foregroundColor(.gray.opacity(0.6))
                 Text("(RPE)")
                     .font(.system(size: 9, weight: .bold, design: .rounded))
-                    .foregroundColor(.red)
+                    .foregroundColor(.green)
             }
             
             HStack(spacing: 3) {
@@ -289,7 +289,7 @@ struct RPECalcSection: View {
                     .foregroundColor(.gray.opacity(0.6))
                 Text("(RIR)")
                     .font(.system(size: 9, weight: .bold, design: .rounded))
-                    .foregroundColor(.red)
+                    .foregroundColor(.green)
             }
         }
     }

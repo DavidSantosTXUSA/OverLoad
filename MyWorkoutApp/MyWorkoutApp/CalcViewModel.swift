@@ -236,7 +236,6 @@ class CalcViewModel: ObservableObject {
     
     func convertSelectedPlates() {
         let conversionFactor = 2.20462
-        let sourcePlates = isKgMode ? lbPlates : kgPlates
         let targetPlates = availablePlates
         
         let converted = selectedPlates.map { plate in

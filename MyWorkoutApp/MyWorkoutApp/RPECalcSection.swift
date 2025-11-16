@@ -140,13 +140,13 @@ struct RPECalcSection: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.gray.opacity(0.15))
         )
-        .onChange(of: viewModel.lastSetWeight) { _ in
+        .onChange(of: viewModel.lastSetWeight) {
             viewModel.calculate1RM()
         }
-        .onChange(of: viewModel.lastSetReps) { _ in
+        .onChange(of: viewModel.lastSetReps) {
             viewModel.calculate1RM()
         }
-        .onChange(of: viewModel.lastSetRPE) { _ in
+        .onChange(of: viewModel.lastSetRPE) {
             viewModel.calculate1RM()
         }
     }
@@ -209,13 +209,13 @@ struct RPECalcSection: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.gray.opacity(0.15))
         )
-        .onChange(of: viewModel.nextSetReps) { _ in
+        .onChange(of: viewModel.nextSetReps) {
             viewModel.calculateNextSetWeight()
         }
-        .onChange(of: viewModel.nextSetRPE) { _ in
+        .onChange(of: viewModel.nextSetRPE) {
             viewModel.calculateNextSetWeight()
         }
-        .onChange(of: viewModel.estimated1RM) { _ in
+        .onChange(of: viewModel.estimated1RM) {
             viewModel.calculateNextSetWeight()
         }
     }

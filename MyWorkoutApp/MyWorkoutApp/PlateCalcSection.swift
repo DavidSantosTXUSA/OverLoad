@@ -182,7 +182,7 @@ struct PlateCalcSection: View {
                                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             )
                     )
-                    .onChange(of: viewModel.targetWeight) { _ in
+                    .onChange(of: viewModel.targetWeight) {
                         // Debounce calculation
                         debounceWorkItem?.cancel()
                         let workItem = DispatchWorkItem {
@@ -216,7 +216,7 @@ struct PlateCalcSection: View {
                                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             )
                     )
-                    .onChange(of: viewModel.barWeight) { _ in
+                    .onChange(of: viewModel.barWeight) {
                         viewModel.calculatePlates()
                     }
                 }

@@ -69,8 +69,8 @@ struct PlateCalculatorView: View {
         
         .background(Color.black.edgesIgnoringSafeArea(.all))
         .dismissKeyboardOnTap()
-        .onChange(of: targetWeight) { _ in calculate() }
-        .onChange(of: barWeight) { _ in calculate() }
+        .onChange(of: targetWeight) { calculate() }
+        .onChange(of: barWeight) { calculate() }
     }
     private var inputFields: some View {
         VStack(spacing: 8) {
@@ -102,7 +102,7 @@ struct PlateCalculatorView: View {
         }
         .pickerStyle(SegmentedPickerStyle())
         .padding(.vertical, 8)
-        .onChange(of: mode) { newMode in
+        .onChange(of: mode) { oldValue, newMode in
             if newMode == .reverse {
                 selectedPlates = []
             }
@@ -184,7 +184,6 @@ struct PlateCalculatorView: View {
     func convertSelectedPlates(toKg: Bool) {
         let conversionFactor = 2.20462
 
-        let sourcePlates = toKg ? lbPlates : kgPlates
         let targetPlates = toKg ? kgPlates : lbPlates
 
         let converted = selectedPlates.map { plate in

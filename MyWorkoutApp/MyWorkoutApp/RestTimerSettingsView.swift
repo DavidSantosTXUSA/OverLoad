@@ -62,7 +62,7 @@ struct RestTimerSettingsView: View {
                                 }
                                 .pickerStyle(WheelPickerStyle())
                                 .frame(width: 80, height: 100)
-                                .onChange(of: minutes) { _ in
+                                .onChange(of: minutes) {
                                     updateDuration()
                                 }
                             }
@@ -78,7 +78,7 @@ struct RestTimerSettingsView: View {
                                 }
                                 .pickerStyle(WheelPickerStyle())
                                 .frame(width: 80, height: 100)
-                                .onChange(of: seconds) { _ in
+                                .onChange(of: seconds) {
                                     updateDuration()
                                 }
                             }

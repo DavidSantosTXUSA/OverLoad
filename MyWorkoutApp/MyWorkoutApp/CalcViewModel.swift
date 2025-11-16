@@ -113,20 +113,26 @@ class CalcViewModel: ObservableObject {
         }
         
         let plates = availablePlates
-        var perSide = (total - bar) / 2
+        let perSide = (total - bar) / 2
         var usedPlates: [Double] = []
+        var remaining = perSide
         
+        // Greedy algorithm: use largest plates first
         for plate in plates {
-            let count = Int(perSide / plate)
+            let count = Int(remaining / plate)
             if count > 0 {
                 usedPlates += Array(repeating: plate, count: count)
-                perSide -= Double(count) * plate
+                remaining -= Double(count) * plate
             }
         }
         
-        // Add smallest plate if there's a remainder
-        if perSide > 0.01, let smallest = plates.last {
-            usedPlates.append(smallest)
+        // Round to nearest loadable weight using smallest plate
+        if let smallest = plates.last, remaining > 0 {
+            // Check if we should round up or down
+            let roundUp = remaining >= (smallest / 2)
+            if roundUp {
+                usedPlates.append(smallest)
+            }
         }
         
         calculatedPlates = usedPlates

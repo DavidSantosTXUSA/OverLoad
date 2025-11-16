@@ -18,10 +18,10 @@ struct PlateCalcSection: View {
                     HStack {
                         HStack(alignment: .firstTextBaseline, spacing: 6) {
                             Text(formatWeight(viewModel.totalWeight))
-                                .font(.system(size: 28, weight: .bold, design: .rounded))
+                                .font(.system(size: 32, weight: .heavy, design: .rounded))
                                 .foregroundColor(.white)
                             Text(viewModel.isKgMode ? "KG" : "LB")
-                                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
                                 .foregroundColor(.cyan)
                         }
                         

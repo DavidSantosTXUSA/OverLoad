@@ -53,23 +53,23 @@ struct CompactPlateButton: View {
                     // Weight label - white text with black stroke for readability
                     VStack(spacing: 1) {
                         ZStack {
-                            // Black outline (4 directions)
+                            // Black outline (4 directions) - thinner
                             Text(formatPlateWeight(weight))
                                 .font(.system(size: 18, weight: .bold, design: .rounded))
                                 .foregroundColor(.black)
-                                .offset(x: -1, y: -1)
+                                .offset(x: -0.5, y: -0.5)
                             Text(formatPlateWeight(weight))
                                 .font(.system(size: 18, weight: .bold, design: .rounded))
                                 .foregroundColor(.black)
-                                .offset(x: 1, y: -1)
+                                .offset(x: 0.5, y: -0.5)
                             Text(formatPlateWeight(weight))
                                 .font(.system(size: 18, weight: .bold, design: .rounded))
                                 .foregroundColor(.black)
-                                .offset(x: -1, y: 1)
+                                .offset(x: -0.5, y: 0.5)
                             Text(formatPlateWeight(weight))
                                 .font(.system(size: 18, weight: .bold, design: .rounded))
                                 .foregroundColor(.black)
-                                .offset(x: 1, y: 1)
+                                .offset(x: 0.5, y: 0.5)
                             // White text on top
                             Text(formatPlateWeight(weight))
                                 .font(.system(size: 18, weight: .bold, design: .rounded))
@@ -77,23 +77,23 @@ struct CompactPlateButton: View {
                         }
                         
                         ZStack {
-                            // Black outline (4 directions)
+                            // Black outline (4 directions) - thinner
                             Text(isKgMode ? "kg" : "lb")
                                 .font(.system(size: 10, weight: .semibold, design: .rounded))
                                 .foregroundColor(.black)
-                                .offset(x: -0.5, y: -0.5)
+                                .offset(x: -0.3, y: -0.3)
                             Text(isKgMode ? "kg" : "lb")
                                 .font(.system(size: 10, weight: .semibold, design: .rounded))
                                 .foregroundColor(.black)
-                                .offset(x: 0.5, y: -0.5)
+                                .offset(x: 0.3, y: -0.3)
                             Text(isKgMode ? "kg" : "lb")
                                 .font(.system(size: 10, weight: .semibold, design: .rounded))
                                 .foregroundColor(.black)
-                                .offset(x: -0.5, y: 0.5)
+                                .offset(x: -0.3, y: 0.3)
                             Text(isKgMode ? "kg" : "lb")
                                 .font(.system(size: 10, weight: .semibold, design: .rounded))
                                 .foregroundColor(.black)
-                                .offset(x: 0.5, y: 0.5)
+                                .offset(x: 0.3, y: 0.3)
                             // White text on top
                             Text(isKgMode ? "kg" : "lb")
                                 .font(.system(size: 10, weight: .semibold, design: .rounded))

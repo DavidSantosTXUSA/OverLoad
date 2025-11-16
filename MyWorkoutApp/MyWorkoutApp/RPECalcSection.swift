@@ -4,28 +4,33 @@ struct RPECalcSection: View {
     @ObservedObject var viewModel: CalcViewModel
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
                 // Unit Toggle Header
                 HStack {
                     Spacer()
                     unitToggleButton
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 8)
+                .padding(.top, 4)
+                .padding(.bottom, 8)
                 
                 // Last Set Card
                 lastSetCard
                     .padding(.horizontal, 20)
+                    .padding(.bottom, 10)
                 
                 // Next Set Card
                 nextSetCard
                     .padding(.horizontal, 20)
+                    .padding(.bottom, 8)
                 
-                // Info Text
+                // Info Text (compact)
                 infoText
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 8)
+                
+                Spacer()
             }
         }
         .background(Color.black)
@@ -66,10 +71,10 @@ struct RPECalcSection: View {
     // MARK: - Last Set Card
     
     private var lastSetCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             // Title
             Text("Last Set")
-                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                .font(.system(size: 16, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
             
             // Weight Input
@@ -110,27 +115,27 @@ struct RPECalcSection: View {
                 if let e1RM = viewModel.estimated1RM {
                     HStack(spacing: 6) {
                         Text(formatWeight(e1RM))
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
+                            .font(.system(size: 22, weight: .heavy, design: .rounded))
                             .foregroundColor(.red)
                         Text(viewModel.isKgMode ? "KG" : "LB")
-                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
                             .foregroundColor(.red.opacity(0.8))
                     }
                 } else {
                     Text("-")
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundColor(.gray.opacity(0.5))
                 }
             }
             
             // Note
             Text("*e1RM = estimated 1 rep max")
-                .font(.system(size: 12, weight: .regular, design: .rounded))
+                .font(.system(size: 10, weight: .regular, design: .rounded))
                 .foregroundColor(.gray.opacity(0.7))
         }
-        .padding(20)
+        .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 12)
                 .fill(Color.gray.opacity(0.15))
         )
         .onChange(of: viewModel.lastSetWeight) { _ in
@@ -147,10 +152,10 @@ struct RPECalcSection: View {
     // MARK: - Next Set Card
     
     private var nextSetCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             // Title
             Text("Next Set")
-                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                .font(.system(size: 16, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
             
             // Reps Input
@@ -182,22 +187,22 @@ struct RPECalcSection: View {
                 if let weight = viewModel.nextSetWeight {
                     HStack(spacing: 6) {
                         Text(formatWeight(weight))
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
+                            .font(.system(size: 22, weight: .heavy, design: .rounded))
                             .foregroundColor(.red)
                         Text(viewModel.isKgMode ? "KG" : "LB")
-                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
                             .foregroundColor(.red.opacity(0.8))
                     }
                 } else {
                     Text("-")
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
                         .foregroundColor(.gray.opacity(0.5))
                 }
             }
         }
-        .padding(20)
+        .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 12)
                 .fill(Color.gray.opacity(0.15))
         )
         .onChange(of: viewModel.nextSetReps) { _ in
@@ -220,27 +225,27 @@ struct RPECalcSection: View {
         keyboardType: UIKeyboardType,
         range: String?
     ) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(label)
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .foregroundColor(.gray)
                 
                 Spacer()
                 
                 if let range = range {
                     Text(range)
-                        .font(.system(size: 12, weight: .regular, design: .rounded))
+                        .font(.system(size: 11, weight: .regular, design: .rounded))
                         .foregroundColor(.gray.opacity(0.6))
                 }
             }
             
             TextField(placeholder, text: text)
                 .keyboardType(keyboardType)
-                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                .font(.system(size: 16, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
-                .padding(.vertical, 14)
-                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 14)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color.gray.opacity(0.1))
@@ -260,26 +265,26 @@ struct RPECalcSection: View {
     // MARK: - Info Text
     
     private var infoText: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 4) {
             Text("RPE & RIR are two forms of autoregulation training tools")
-                .font(.system(size: 14, weight: .regular, design: .rounded))
-                .foregroundColor(.gray.opacity(0.8))
+                .font(.system(size: 11, weight: .regular, design: .rounded))
+                .foregroundColor(.gray.opacity(0.7))
             
             HStack(spacing: 4) {
                 Text("Rate of Perceived Exertion")
-                    .font(.system(size: 14, weight: .regular, design: .rounded))
-                    .foregroundColor(.gray.opacity(0.8))
+                    .font(.system(size: 11, weight: .regular, design: .rounded))
+                    .foregroundColor(.gray.opacity(0.7))
                 Text("(RPE)")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .font(.system(size: 11, weight: .bold, design: .rounded))
                     .foregroundColor(.red)
             }
             
             HStack(spacing: 4) {
                 Text("Reps In Reserve")
-                    .font(.system(size: 14, weight: .regular, design: .rounded))
-                    .foregroundColor(.gray.opacity(0.8))
+                    .font(.system(size: 11, weight: .regular, design: .rounded))
+                    .foregroundColor(.gray.opacity(0.7))
                 Text("(RIR)")
-                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .font(.system(size: 11, weight: .bold, design: .rounded))
                     .foregroundColor(.red)
             }
         }

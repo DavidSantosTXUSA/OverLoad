@@ -33,10 +33,10 @@ struct WorkoutListView: View {
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(activeWorkout.name)
                                             .foregroundColor(.white)
-                                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                                            .font(.system(size: 20, weight: .heavy, design: .rounded))
                                         Text("Tap to resume")
                                             .foregroundColor(.gray)
-                                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                                            .font(.system(size: 14, weight: .semibold, design: .rounded))
                                     }
                                     Spacer()
                                 }
@@ -64,7 +64,7 @@ struct WorkoutListView: View {
                                             .foregroundColor(.green)
                                         Text(template.name)
                                             .foregroundColor(.white)
-                                            .font(.system(size: 17, weight: .bold, design: .rounded))
+                                            .font(.system(size: 19, weight: .heavy, design: .rounded))
                                     }
                                     .padding()
                                     .background(Color.gray.opacity(0.3))
@@ -89,7 +89,7 @@ struct WorkoutListView: View {
                 .listStyle(PlainListStyle())
             }
             .navigationTitle("Workouts")
-            .font(.system(size: 34, weight: .bold, design: .rounded))
+            .font(.system(size: 36, weight: .heavy, design: .rounded))
             .foregroundColor(.white)
             .navigationBarItems(
                 leading: EditButton().foregroundColor(.green),

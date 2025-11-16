@@ -1,35 +1,31 @@
-//
-//  CalcView.swift
-//  MyWorkoutApp
-//
-//  Created by David Santos on 4/23/25.
-//
-
-
 import SwiftUI
 
 struct CalcView: View {
+    @StateObject private var viewModel = CalcViewModel()
     @State private var selectedTool = 0
-    let tools = ["Plate Calc","RPE Calc"]
-
+    
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 0) {
+                // Compact segmented control for Plate/RPE
                 Picker("Select Tool", selection: $selectedTool) {
-                    ForEach(0..<tools.count) { index in
-                        Text(tools[index]).tag(index)
-                    }
+                    Text("Plate Calc").tag(0)
+                    Text("RPE Calc").tag(1)
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                .padding()
-
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .padding(.bottom, 12)
+                
+                // Content based on selection
                 if selectedTool == 0 {
-                    PlateCalculatorView()
+                    PlateCalcSection(viewModel: viewModel)
                 } else {
-                    RPECalculatorView()
+                    RPECalcSection(viewModel: viewModel)
                 }
             }
             .navigationTitle("Calculator")
+            .navigationBarTitleDisplayMode(.inline) // Compact title
             .background(Color.black.edgesIgnoringSafeArea(.all))
         }
         .preferredColorScheme(.dark)

@@ -35,8 +35,8 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
-# Screenshots (optional - uncomment if you don't want to track screenshots)
-# Simulator Screenshot*.png
+# Screenshots
+Simulator Screenshot*.png
 
 # Firebase / GoogleService files (optional if private)
 GoogleService-Info.plist

@@ -39,9 +39,6 @@
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B51744F72CC6B9E6008EE709 /* MyWorkoutApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;

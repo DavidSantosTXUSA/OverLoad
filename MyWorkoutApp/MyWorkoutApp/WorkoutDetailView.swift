@@ -455,8 +455,10 @@ struct WorkoutDetailView: View {
         autoSaveWork?.cancel()
         
         // Create new work item
-        let work = DispatchWorkItem { [weak self] in
-            self?.autoSaveWorkout()
+        // Note: WorkoutDetailView is a struct, so we don't need [weak self]
+        // Structs are value types and don't create retain cycles
+        let work = DispatchWorkItem { [self] in
+            self.autoSaveWorkout()
         }
         autoSaveWork = work
         

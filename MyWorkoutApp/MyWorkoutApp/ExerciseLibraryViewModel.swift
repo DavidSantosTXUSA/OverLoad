@@ -35,7 +35,38 @@ class ExerciseLibraryViewModel: ObservableObject {
     }
 
     func loadExercises() throws {
-        exercises = try persistenceService.load([Exercise].self, forKey: "exercises")
+        if let loaded = try persistenceService.load([Exercise].self, forKey: "exercises") {
+            exercises = loaded
+        } else {
+            // First time setup - add default exercises
+            exercises = getDefaultExercises()
+            try saveExercises()
+        }
+    }
+    
+    private func getDefaultExercises() -> [Exercise] {
+        return [
+            "Bench Press",
+            "Squat",
+            "Deadlift",
+            "Overhead Press",
+            "Barbell Row",
+            "Pull-ups",
+            "Dips",
+            "Barbell Curl",
+            "Tricep Extension",
+            "Leg Press",
+            "Romanian Deadlift",
+            "Front Squat",
+            "Incline Bench Press",
+            "Lat Pulldown",
+            "Cable Row",
+            "Lateral Raise",
+            "Face Pull",
+            "Leg Curl",
+            "Leg Extension",
+            "Calf Raise"
+        ].map { Exercise(name: $0) }
     }
     
     func handleError(_ error: Error) {

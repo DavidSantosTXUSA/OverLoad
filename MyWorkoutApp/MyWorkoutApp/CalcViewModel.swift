@@ -21,10 +21,30 @@ class CalcViewModel: ObservableObject {
     @Published var unitConversionMessage: String = ""
     
     // MARK: - RPE Calculator State
-    @Published var rpeWeight: String = ""
-    @Published var rpeReps: String = ""
-    @Published var rpeValue: String = ""
-    @Published var estimated1RM: Double?
+    // Last Set (inputs weight, reps, RPE → calculates e1RM)
+    @Published var lastSetWeight: String = ""
+    @Published var lastSetReps: String = ""
+    @Published var lastSetRPE: String = ""
+    @Published var estimated1RM: Double? // Calculated from Last Set
+    
+    // Next Set (inputs reps, RPE → calculates weight from e1RM)
+    @Published var nextSetReps: String = ""
+    @Published var nextSetRPE: String = ""
+    @Published var nextSetWeight: Double? // Calculated from e1RM
+    
+    // Legacy support (for backward compatibility)
+    var rpeWeight: String {
+        get { lastSetWeight }
+        set { lastSetWeight = newValue }
+    }
+    var rpeReps: String {
+        get { lastSetReps }
+        set { lastSetReps = newValue }
+    }
+    var rpeValue: String {
+        get { lastSetRPE }
+        set { lastSetRPE = newValue }
+    }
     
     // MARK: - Plate Arrays
     let lbPlates = [45.0, 35.0, 25.0, 10.0, 5.0, 2.5]
@@ -61,11 +81,22 @@ class CalcViewModel: ObservableObject {
     }
     
     var isRPEValid: Bool {
-        guard let weight = Double(rpeWeight), weight > 0,
-              let reps = Int(rpeReps), reps >= 1, reps <= 10,
-              let rpe = Double(rpeValue),
+        guard let weight = Double(lastSetWeight), weight > 0,
+              let reps = Int(lastSetReps), reps >= 1, reps <= 10,
+              let rpe = Double(lastSetRPE),
               let rpeMap = rpeTable[rpe],
               rpeMap[reps] != nil else {
+            return false
+        }
+        return true
+    }
+    
+    var isNextSetValid: Bool {
+        guard let reps = Int(nextSetReps), reps >= 1, reps <= 10,
+              let rpe = Double(nextSetRPE),
+              let rpeMap = rpeTable[rpe],
+              rpeMap[reps] != nil,
+              estimated1RM != nil else {
             return false
         }
         return true
@@ -216,14 +247,16 @@ class CalcViewModel: ObservableObject {
     
     // MARK: - RPE Calculator Methods
     
+    // Calculate e1RM from Last Set (weight, reps, RPE)
     func calculate1RM() {
-        guard let rawWeight = Double(rpeWeight),
-              let reps = Int(rpeReps),
-              let rpeValue = Double(rpeValue),
+        guard let rawWeight = Double(lastSetWeight),
+              let reps = Int(lastSetReps),
+              let rpeValue = Double(lastSetRPE),
               reps >= 1, reps <= 10,
               let rpeMap = rpeTable[rpeValue],
               let percent = rpeMap[reps] else {
             estimated1RM = nil
+            nextSetWeight = nil
             return
         }
         
@@ -233,13 +266,39 @@ class CalcViewModel: ObservableObject {
         
         // Convert back to KG if needed
         estimated1RM = isKgMode ? estimated1RMLb / 2.2046226218 : estimated1RMLb
+        
+        // Recalculate Next Set weight if inputs are valid
+        calculateNextSetWeight()
+    }
+    
+    // Calculate weight for Next Set from e1RM, reps, RPE
+    func calculateNextSetWeight() {
+        guard let e1RM = estimated1RM,
+              let reps = Int(nextSetReps),
+              let rpeValue = Double(nextSetRPE),
+              reps >= 1, reps <= 10,
+              let rpeMap = rpeTable[rpeValue],
+              let percent = rpeMap[reps] else {
+            nextSetWeight = nil
+            return
+        }
+        
+        // Convert e1RM to LB for calculation
+        let e1RMLb = isKgMode ? e1RM * 2.2046226218 : e1RM
+        let weightLb = e1RMLb * percent
+        
+        // Convert back to KG if needed
+        nextSetWeight = isKgMode ? weightLb / 2.2046226218 : weightLb
     }
     
     func clearRPE() {
-        rpeWeight = ""
-        rpeReps = ""
-        rpeValue = ""
+        lastSetWeight = ""
+        lastSetReps = ""
+        lastSetRPE = ""
+        nextSetReps = ""
+        nextSetRPE = ""
         estimated1RM = nil
+        nextSetWeight = nil
     }
 }
 

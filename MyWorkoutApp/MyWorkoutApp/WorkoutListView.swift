@@ -21,7 +21,7 @@ struct WorkoutListView: View {
                        let template = workoutTemplateViewModel.workoutTemplates.first(where: { $0.id == activeWorkout.templateID }) {
                         Section(header: Text("Active Workout")
                             .foregroundColor(.cyan)
-                            .font(.headline)) {
+                            .font(.system(size: 16, weight: .bold, design: .rounded))) {
                             NavigationLink(destination: WorkoutDetailView(
                                 workoutSessionViewModel: workoutSessionViewModel,
                                 template: template)
@@ -33,10 +33,10 @@ struct WorkoutListView: View {
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(activeWorkout.name)
                                             .foregroundColor(.white)
-                                            .fontWeight(.semibold)
+                                            .font(.system(size: 18, weight: .bold, design: .rounded))
                                         Text("Tap to resume")
                                             .foregroundColor(.gray)
-                                            .font(.caption)
+                                            .font(.system(size: 13, weight: .medium, design: .rounded))
                                     }
                                     Spacer()
                                 }
@@ -52,7 +52,7 @@ struct WorkoutListView: View {
                     // Workout Templates Section
                     Section(header: Text("Workout Templates")
                         .foregroundColor(.cyan)
-                        .font(.headline)) {
+                        .font(.system(size: 16, weight: .bold, design: .rounded))) {
                         ForEach(workoutTemplateViewModel.workoutTemplates) { template in
                             HStack {
                                 NavigationLink(destination: WorkoutDetailView(
@@ -64,7 +64,7 @@ struct WorkoutListView: View {
                                             .foregroundColor(.green)
                                         Text(template.name)
                                             .foregroundColor(.white)
-                                            .fontWeight(.semibold)
+                                            .font(.system(size: 17, weight: .bold, design: .rounded))
                                     }
                                     .padding()
                                     .background(Color.gray.opacity(0.3))
@@ -89,6 +89,7 @@ struct WorkoutListView: View {
                 .listStyle(PlainListStyle())
             }
             .navigationTitle("Workouts")
+            .font(.system(size: 34, weight: .bold, design: .rounded))
             .foregroundColor(.white)
             .navigationBarItems(
                 leading: EditButton().foregroundColor(.green),

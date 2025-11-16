@@ -8,11 +8,11 @@ struct PlateCalcSection: View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 // Top section: Controls (very compact)
-                VStack(spacing: 8) {
+                VStack(spacing: viewModel.selectedMode == .input ? 16 : 8) {
                     // Header Bar: Mode Toggle + Unit Button (single row)
                     headerBar
                         .padding(.horizontal, 20)
-                        .padding(.top, 4)
+                        .padding(.top, viewModel.selectedMode == .input ? 12 : 4)
                     
                     // Weight Display - Very Compact
                     HStack {
@@ -33,13 +33,13 @@ struct PlateCalcSection: View {
                             .foregroundColor(.gray.opacity(0.8))
                     }
                     .padding(.horizontal, 20)
-                    .padding(.vertical, 8)
+                    .padding(.vertical, viewModel.selectedMode == .input ? 12 : 8)
                     
                     // Mode-Specific Input (compact, only in input mode)
                     if viewModel.selectedMode == .input {
                         inputModeContentCompact
                             .padding(.horizontal, 20)
-                            .padding(.bottom, 8)
+                            .padding(.bottom, 16)
                     }
                 }
                 .background(Color.black)
@@ -51,6 +51,7 @@ struct PlateCalcSection: View {
                 )
                 .frame(height: geometry.size.height * 0.30) // Reduced to 30% to make room for formula
                 .padding(.horizontal, 20)
+                .padding(.top, viewModel.selectedMode == .input ? 8 : 0) // Extra padding in input mode
                 .background(Color.black)
                 
                 // Bottom section: Controls and Breakdown
@@ -153,71 +154,73 @@ struct PlateCalcSection: View {
         }
     }
     
-    // MARK: - Input Mode Content (Compact)
-    
-    private var inputModeContentCompact: some View {
-        HStack(spacing: 16) {
-            // Target Weight Field
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Target")
-                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                    .foregroundColor(.gray)
-                
-                TextField(
-                    viewModel.isKgMode ? "100" : "225",
-                    text: $viewModel.targetWeight
-                )
-                .keyboardType(.decimalPad)
-                .font(.system(size: 20, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
-                .padding(12)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.15))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                        )
-                )
-                .onChange(of: viewModel.targetWeight) { _ in
-                    // Debounce calculation
-                    debounceWorkItem?.cancel()
-                    let workItem = DispatchWorkItem {
+        // MARK: - Input Mode Content (Compact)
+
+        private var inputModeContentCompact: some View {
+            HStack(spacing: 16) {
+                // Target Weight Field
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Target")
+                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .foregroundColor(.gray)
+
+                    TextField(
+                        viewModel.isKgMode ? "100" : "225",
+                        text: $viewModel.targetWeight
+                    )
+                    .keyboardType(.decimalPad)
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .padding(.vertical, 14)
+                    .padding(.horizontal, 14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.15))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                            )
+                    )
+                    .onChange(of: viewModel.targetWeight) { _ in
+                        // Debounce calculation
+                        debounceWorkItem?.cancel()
+                        let workItem = DispatchWorkItem {
+                            viewModel.calculatePlates()
+                        }
+                        debounceWorkItem = workItem
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
+                    }
+                }
+
+                // Bar Weight Field
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Bar")
+                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .foregroundColor(.gray)
+
+                    TextField(
+                        viewModel.isKgMode ? "20" : "45",
+                        text: $viewModel.barWeight
+                    )
+                    .keyboardType(.decimalPad)
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .padding(.vertical, 14)
+                    .padding(.horizontal, 14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.15))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                            )
+                    )
+                    .onChange(of: viewModel.barWeight) { _ in
                         viewModel.calculatePlates()
                     }
-                    debounceWorkItem = workItem
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
-                }
-            }
-            
-            // Bar Weight Field
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Bar")
-                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                    .foregroundColor(.gray)
-                
-                TextField(
-                    viewModel.isKgMode ? "20" : "45",
-                    text: $viewModel.barWeight
-                )
-                .keyboardType(.decimalPad)
-                .font(.system(size: 20, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
-                .padding(12)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.15))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                        )
-                )
-                .onChange(of: viewModel.barWeight) { _ in
-                    viewModel.calculatePlates()
                 }
             }
         }
-    }
     
     private func formatWeight(_ weight: Double) -> String {
         if weight.truncatingRemainder(dividingBy: 1) == 0 {

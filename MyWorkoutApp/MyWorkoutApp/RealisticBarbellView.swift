@@ -121,8 +121,8 @@ struct PlateBarView: View {
             case 35: return 150 // 35lb same height as 15kg
             case 25: return 130 // 25lb same height as 10kg
             case 10: return 110 // Smaller
-            case 5: return 110 // Smaller
-            case 2.5: return 65 // Much smaller
+            case 5: return 75 // Taller than 2.5lb (like 2.5kg vs 1.25kg)
+            case 2.5: return 65 // Smaller
             default: return 100
             }
         }

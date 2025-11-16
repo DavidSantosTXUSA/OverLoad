@@ -44,7 +44,7 @@ struct WorkoutProgressView: View {
                             .foregroundColor(.gray)
                         Text("No completed workouts yet.")
                             .foregroundColor(.gray)
-                            .font(.subheadline)
+                            .font(.system(size: 16, weight: .medium, design: .rounded))
                         Spacer()
                     }
                 } else {

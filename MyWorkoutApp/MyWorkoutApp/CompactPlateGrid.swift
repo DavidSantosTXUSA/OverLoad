@@ -50,16 +50,56 @@ struct CompactPlateButton: View {
                     .frame(width: 60, height: 60)
                     .shadow(color: plateColor(for: weight, isKgMode: isKgMode).opacity(0.3), radius: 4, x: 0, y: 2)
                 
-                // Weight label
-                VStack(spacing: 1) {
-                    Text(formatPlateWeight(weight))
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(textColorForPlate(weight, isKgMode: isKgMode))
-                    
-                    Text(isKgMode ? "kg" : "lb")
-                        .font(.system(size: 10, weight: .medium, design: .rounded))
-                        .foregroundColor(textColorForPlate(weight, isKgMode: isKgMode).opacity(0.9))
-                }
+                    // Weight label - white text with black stroke for readability
+                    VStack(spacing: 1) {
+                        ZStack {
+                            // Black outline (4 directions)
+                            Text(formatPlateWeight(weight))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.black)
+                                .offset(x: -1, y: -1)
+                            Text(formatPlateWeight(weight))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.black)
+                                .offset(x: 1, y: -1)
+                            Text(formatPlateWeight(weight))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.black)
+                                .offset(x: -1, y: 1)
+                            Text(formatPlateWeight(weight))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.black)
+                                .offset(x: 1, y: 1)
+                            // White text on top
+                            Text(formatPlateWeight(weight))
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+                        
+                        ZStack {
+                            // Black outline (4 directions)
+                            Text(isKgMode ? "kg" : "lb")
+                                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                                .foregroundColor(.black)
+                                .offset(x: -0.5, y: -0.5)
+                            Text(isKgMode ? "kg" : "lb")
+                                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                                .foregroundColor(.black)
+                                .offset(x: 0.5, y: -0.5)
+                            Text(isKgMode ? "kg" : "lb")
+                                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                                .foregroundColor(.black)
+                                .offset(x: -0.5, y: 0.5)
+                            Text(isKgMode ? "kg" : "lb")
+                                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                                .foregroundColor(.black)
+                                .offset(x: 0.5, y: 0.5)
+                            // White text on top
+                            Text(isKgMode ? "kg" : "lb")
+                                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+                    }
                 
                 // Count badge
                 if count > 0 {

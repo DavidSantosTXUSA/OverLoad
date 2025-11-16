@@ -52,7 +52,7 @@ struct WorkoutDetailView: View {
                     ForEach(workoutSession.exerciseEntries.indices, id: \.self) { exerciseIndex in
                         VStack(alignment: .leading, spacing: 8) {
                             Text(workoutSession.exerciseEntries[exerciseIndex].exercise.name)
-                                .font(.headline)
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
                                 .foregroundColor(.cyan)
 
                             ForEach(workoutSession.exerciseEntries[exerciseIndex].sets.indices, id: \.self) { setIndex in

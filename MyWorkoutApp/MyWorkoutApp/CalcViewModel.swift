@@ -97,6 +97,7 @@ class CalcViewModel: ObservableObject {
         guard let weight = Double(lastSetWeight), weight > 0,
               let reps = Int(lastSetReps), reps >= 1, reps <= 10,
               let rpe = Double(lastSetRPE),
+              rpe >= 1.0, rpe <= 10.0,
               let rpeMap = rpeTable[rpe],
               rpeMap[reps] != nil else {
             return false
@@ -107,6 +108,7 @@ class CalcViewModel: ObservableObject {
     var isNextSetValid: Bool {
         guard let reps = Int(nextSetReps), reps >= 1, reps <= 10,
               let rpe = Double(nextSetRPE),
+              rpe >= 1.0, rpe <= 10.0,
               let rpeMap = rpeTable[rpe],
               rpeMap[reps] != nil,
               estimated1RM != nil else {
